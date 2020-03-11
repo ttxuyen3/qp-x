@@ -1,0 +1,57 @@
+---
+project: 'ric_app_qp_driver'
+project_creation_date: '2020-03-10'
+project_category: ''
+lifecycle_state: 'Incubation'
+project_lead: &oran_ric_app_qp_driver_ptl
+    name: 'Matti Hiltunen'
+    email: 'hiltunen@research.att.com'
+    id: 'MattiHiltunen'
+    company: 'AT&T Labs-Research'
+    timezone: 'America/New_York'
+primary_contact: *oran_ric_app_qp_driver_ptl
+issue_tracking:
+    type: 'jira'
+    url: 'https://jira.o-ran-sc.org/projects/'
+    key: 'ric_app_qp_driver'
+mailing_list:
+    type: 'groups.io'
+    url: 'https://lists.o-ran-sc.org/g/main'
+    tag: '[]'
+realtime_discussion:
+    type: 'irc'
+    server: 'freenode.net'
+    channel: '#oran'
+meetings:
+    - type: 'gotomeeting+irc'
+      agenda: 'https://wiki.o-ran-sc.org/display/'
+      url: ''
+      server: 'freenode.net'
+      channel: '#oran'
+      repeats: ''
+      time: ''
+repositories:
+    - ric-app/qp-driver
+committers:
+    - <<: *oran_ric_app_qp_driver_ptl
+    - name: 'Jack Lucas'
+      email: 'jflucas@research.att.com'
+      company: 'ATT'
+      id: 'jackl'
+      timezone: 'America/New_York'
+    - name: 'Tommy Carpenter'
+      email: 'tc677g@att.com'
+      company: 'att'
+      id: 'tommycarpenter'
+      timezone: 'America/New_York'
+    - name: 'Scott Daniels'
+      email: 'daniels@research.att.com'
+      company: 'ATT'
+      id: 'escottdaniels'
+tsc:
+    # yamllint disable rule:line-length
+    approval: 'https://wiki.o-ran-sc.org/display/TOC#ORANSCTechnicalOversightCommittee(TOC)-20200304'
+    changes:
+        - type: ''
+          name: ''
+          link: ''
