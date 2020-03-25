@@ -14,6 +14,16 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+[0.0.2] - 3/25/2020
+-------------------
+::
+
+    * Move to SI95
+    * Move to Xapp frame 0.6.0
+    * Move to py38
+    * Remove unneeded stuff from setup.py since this is a docker component and not a pypi library
+    * Add some mock data for future development
+
 [0.0.1] - 3/17/2020
 -------------------
 ::

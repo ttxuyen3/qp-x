@@ -13,16 +13,15 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # ==================================================================================
-FROM python:3.7-alpine
+FROM python:3.8-alpine
 
 # RMR setup
 RUN mkdir -p /opt/route/
-COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:1-rmr1.13.1 /usr/local/lib64/libnng.so /usr/local/lib64/libnng.so
-COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:1-rmr1.13.1 /usr/local/lib64/librmr_nng.so /usr/local/lib64/librmr_nng.so
+COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:3-rmr-si95-nng-3.6.1 /usr/local/lib64/librmr_si.so /usr/local/lib64/librmr_si.so
 ENV LD_LIBRARY_PATH /usr/local/lib/:/usr/local/lib64
 
 # sdl needs gcc
-RUN apk update && apk add gcc musl-dev bash
+RUN apk update && apk add gcc musl-dev
 
 # Install
 COPY setup.py /tmp
