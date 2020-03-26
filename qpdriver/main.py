@@ -1,3 +1,6 @@
+"""
+qpdriver entrypoint module
+"""
 # ==================================================================================
 #       Copyright (c) 2020 AT&T Intellectual Property.
 #
@@ -21,6 +24,13 @@ This is only a stencil for now, will be filled in!
 What is currently here was only for initial skeleton and test creation.
 """
 
+"""
+RMR Messages
+ #define TS_UE_LIST 30000
+ #define TS_QOE_PRED_REQ 30001
+30000 is the message QPD receives, sends out 30001 to QP
+"""
+
 
 def post_init(self):
     self.def_hand_called = 0
@@ -34,6 +44,14 @@ def default_handler(self, summary, sbuf):
 
 
 def steering_req_handler(self, summary, sbuf):
+    """
+    This is the main handler for this xapp, which handles the traffic steering requests.
+    Traffic steering requests predictions on a set of UEs.
+    QP Driver (this) fetches a set of data, merges it together in a deterministic way, then sends a new message out to the QP predictor Xapp.
+
+    The incoming message that this function handles looks like:
+        {“UEPredictionSet” : [“UEId1”,”UEId2”,”UEId3”]}
+    """
     self.traffic_steering_requests += 1
     print(summary)
     self.rmr_free(sbuf)
@@ -41,7 +59,7 @@ def steering_req_handler(self, summary, sbuf):
 
 # obv some of these flags have to change
 rmr_xapp = RMRXapp(default_handler, post_init=post_init, rmr_port=4562, use_fake_sdl=True)
-rmr_xapp.register_callback(steering_req_handler, 60000)  # no idea (yet) what the real int is here
+rmr_xapp.register_callback(steering_req_handler, 30000)
 
 
 def start(thread=False):

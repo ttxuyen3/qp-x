@@ -33,8 +33,8 @@ def test_flow():
     # define a test sender
     def entry(self):
 
-        val = json.dumps({"test send 60000": 1}).encode()
-        self.rmr_send(val, 60000)
+        val = json.dumps({"test send 30000": 1}).encode()
+        self.rmr_send(val, 30000)
 
         val = json.dumps({"test send 60001": 2}).encode()
         self.rmr_send(val, 60001)

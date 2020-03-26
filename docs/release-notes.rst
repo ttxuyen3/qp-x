@@ -14,6 +14,12 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+[0.1.0] - 3/26/2020
+-------------------
+::
+
+    * Implement the core business logic of the data merge
+
 [0.0.2] - 3/25/2020
 -------------------
 ::

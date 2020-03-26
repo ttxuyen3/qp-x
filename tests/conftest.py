@@ -21,6 +21,7 @@ def ue_metrics():
             {"CID": "310-680-200-555001", "CellRF": {"RSRP": -90, "RSRQ": -13, "RSSINR": -2.5}},
             {"CID": "310-680-200-555003", "CellRF": {"RSRP": -140, "RSRQ": -17, "RSSINR": -6}},
         ],
+        "FAKE_BAD_DATA_TEST": "THIS SHOULD GET DELETED",
     }
 
 
@@ -51,6 +52,7 @@ def cell_metrics_2():
         "MeasPeriodAvailPRB": 20,
         "AvailPRBDL": 30,
         "AvailPRBUL": 45,
+        "FAKE_BAD_DATA_TEST": "THIS SHOULD GET DELETED",
     }
 
 
@@ -100,20 +102,6 @@ def qpd_to_qp():
                 "RFMeasurements": {"RSRP": -90, "RSRQ": -13, "RSSINR": -2.5},
             },
             {
-                "CellID": "310-680-200-555002",
-                "MeasTimestampPDCPBytes": "2020-03-18 02:23:18.220",
-                "MeasPeriodPDCPBytes": 20,
-                "PDCPBytesDL": 800000,
-                "PDCPBytesUL": 400000,
-                "MeasTimestampAvailPRB": "2020-03-18 02:23:18.220",
-                "MeasPeriodAvailPRB": 20,
-                "AvailPRBDL": 30,
-                "AvailPRBUL": 45,
-                "MeasTimestampRF": "2020-03-18 02:23:18.210",
-                "MeasPeriodRF": 40,
-                "RFMeasurements": {"RSRP": -115, "RSRQ": -16, "RSSINR": -5},
-            },
-            {
                 "CellID": "310-680-200-555003",
                 "MeasTimestampPDCPBytes": "2020-03-18 02:23:18.220",
                 "MeasPeriodPDCPBytes": 20,
@@ -126,6 +114,20 @@ def qpd_to_qp():
                 "MeasTimestampRF": "2020-03-18 02:23:18.210",
                 "MeasPeriodRF": 40,
                 "RFMeasurements": {"RSRP": -140, "RSRQ": -17, "RSSINR": -6},
+            },
+            {
+                "CellID": "310-680-200-555002",
+                "MeasTimestampPDCPBytes": "2020-03-18 02:23:18.220",
+                "MeasPeriodPDCPBytes": 20,
+                "PDCPBytesDL": 800000,
+                "PDCPBytesUL": 400000,
+                "MeasTimestampAvailPRB": "2020-03-18 02:23:18.220",
+                "MeasPeriodAvailPRB": 20,
+                "AvailPRBDL": 30,
+                "AvailPRBUL": 45,
+                "MeasTimestampRF": "2020-03-18 02:23:18.210",
+                "MeasPeriodRF": 40,
+                "RFMeasurements": {"RSRP": -115, "RSRQ": -16, "RSSINR": -5},
             },
         ],
     }
