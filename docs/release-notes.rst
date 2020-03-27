@@ -14,6 +14,14 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+[0.2.0] - 3/27/2020
+-------------------
+::
+
+    * Implement SDL calls and testing
+    * Small cleanups
+
+
 [0.1.0] - 3/26/2020
 -------------------
 ::

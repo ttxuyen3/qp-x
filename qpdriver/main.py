@@ -18,18 +18,15 @@ qpdriver entrypoint module
 # ==================================================================================
 from ricxappframe.xapp_frame import RMRXapp
 
-
-"""
-This is only a stencil for now, will be filled in!
-What is currently here was only for initial skeleton and test creation.
-"""
-
 """
 RMR Messages
  #define TS_UE_LIST 30000
  #define TS_QOE_PRED_REQ 30001
 30000 is the message QPD receives, sends out 30001 to QP
 """
+
+
+rmr_xapp = None
 
 
 def post_init(self):
@@ -39,7 +36,7 @@ def post_init(self):
 
 def default_handler(self, summary, sbuf):
     self.def_hand_called += 1
-    print(summary)
+    self.logger.info("QP Driver received an unexpected message of type: {}, dropping.".format(summary["message type"]))
     self.rmr_free(sbuf)
 
 
@@ -57,17 +54,23 @@ def steering_req_handler(self, summary, sbuf):
     self.rmr_free(sbuf)
 
 
-# obv some of these flags have to change
-rmr_xapp = RMRXapp(default_handler, post_init=post_init, rmr_port=4562, use_fake_sdl=True)
-rmr_xapp.register_callback(steering_req_handler, 30000)
-
-
-def start(thread=False):
+def start(thread=False, use_fake_sdl=False):
+    """
+    this is a convienence function that allows this xapp to run in Docker for "real" (no thread, real SDL)
+    but also easily modified for unit testing (e.g., use_fake_sdl)
+    the defaults for this function are for the Dockerized xapp.
+    """
+    global rmr_xapp
+    rmr_xapp = RMRXapp(default_handler, post_init=post_init, rmr_port=4562, use_fake_sdl=use_fake_sdl)
+    rmr_xapp.register_callback(steering_req_handler, 30000)
     rmr_xapp.run(thread)
 
 
 def stop():
-    """can only be called if thread=True when started"""
+    """
+    can only be called if thread=True when started
+    TODO: could we register a signal handler for Docker SIGTERM that calls this?
+    """
     rmr_xapp.stop()
 
 

@@ -17,6 +17,10 @@ qpdriver module responsible for SDL queries and data merging
 #   limitations under the License.
 # ==================================================================================
 
+# namespaces
+UE_NS = "TS-UE-metrics"
+CELL_NS = "TS-cell-metrics"
+
 # list of keys in ue metrics that we want to carry over to qp pred
 UE_KEY_LIST = set(
     [
@@ -48,17 +52,7 @@ CELL_KEY_LIST = set(
 )
 
 
-def _fetch_ue_metrics(ueid):
-    """fetch ue metrics for ueid"""
-    return {}
-
-
-def _fetch_cell_metrics(cellid):
-    """fetch cell metrics for a cellid"""
-    return {}
-
-
-def form_qp_pred_req(ueid):
+def form_qp_pred_req(xapp_ref, ueid):
     """
     this function takes in a single ueid and:
         - fetches the current ue data
@@ -67,7 +61,7 @@ def form_qp_pred_req(ueid):
     Note that a single request to qp driver may have many UEs in a list, however since a new message needs to be sent for each one,
     the calling function iterates over that list, rather than doing it here.
     """
-    ue_data = _fetch_ue_metrics(ueid)
+    ue_data = xapp_ref.sdl_get(UE_NS, str(ueid), usemsgpack=False)
 
     serving_cid = ue_data["ServingCellID"]
 
@@ -88,7 +82,7 @@ def form_qp_pred_req(ueid):
 
     # form the CellMeasurements
     for cid in cell_ids:
-        cellm = _fetch_cell_metrics(cid)
+        cellm = xapp_ref.sdl_get(CELL_NS, cid, usemsgpack=False)
         # if we were really under performance strain here we could delete from the orig instead of copying but this code is far simpler
         cell_data = {k: cellm[k] for k in CELL_KEY_LIST}
 

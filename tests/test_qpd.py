@@ -16,19 +16,47 @@
 import json
 import time
 from contextlib import suppress
-from qpdriver import main
+from qpdriver import main, data
 from ricxappframe.xapp_frame import Xapp
 
 test_sender = None
 
+"""
+ these tests are not currently parallelizable (do not use this tox flag)
+ I would use setup_module, however that can't take monkeypatch fixtures
+ Currently looking for the best way to make this better: https://stackoverflow.com/questions/60886013/python-monkeypatch-in-pytest-setup-module
+"""
 
-def test_flow():
+
+def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, qpd_to_qp):
+    # monkeypatch post_init to set the data we want in SDL
+    def fake_post_init(self):
+        self.def_hand_called = 0
+        self.traffic_steering_requests = 0
+        self.sdl_set(data.UE_NS, "12345", ue_metrics, usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555001", cell_metrics_1, usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555002", cell_metrics_2, usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555003", cell_metrics_3, usemsgpack=False)
+
+    # patch
+    monkeypatch.setattr("qpdriver.main.post_init", fake_post_init)
+
+    # start qpd
+    main.start(thread=True, use_fake_sdl=True)
+
+
+def test_data_merge(qpd_to_qp):
+    """
+    test the merge (basically tests all of the code in data.py in this one line)
+    TODO: this will go away when the full E2E flow is implemented as we can just look at the final result
+    """
+    assert data.form_qp_pred_req(main.rmr_xapp, 12345) == qpd_to_qp
+
+
+def test_rmr_flow(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, qpd_to_qp):
     """
     just a skeleton for now.. this will evolve when qpd evolves
     """
-
-    # start qpd
-    main.start(thread=True)
 
     # define a test sender
     def entry(self):
