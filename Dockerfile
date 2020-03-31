@@ -17,7 +17,7 @@ FROM python:3.8-alpine
 
 # RMR setup
 RUN mkdir -p /opt/route/
-COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:3-rmr-si95-nng-3.6.1 /usr/local/lib64/librmr_si.so /usr/local/lib64/librmr_si.so
+COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:5-a3.11-nng-rmr3 /usr/local/lib64/librmr_si.so /usr/local/lib64/librmr_si.so
 ENV LD_LIBRARY_PATH /usr/local/lib/:/usr/local/lib64
 
 # sdl needs gcc

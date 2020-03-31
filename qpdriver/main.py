@@ -16,7 +16,10 @@ qpdriver entrypoint module
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # ==================================================================================
+import json
 from ricxappframe.xapp_frame import RMRXapp
+from qpdriver import data
+from qpdriver.exceptions import UENotFound
 
 """
 RMR Messages
@@ -50,8 +53,26 @@ def steering_req_handler(self, summary, sbuf):
         {“UEPredictionSet” : [“UEId1”,”UEId2”,”UEId3”]}
     """
     self.traffic_steering_requests += 1
-    print(summary)
+    ue_list = []
+    try:
+        req = json.loads(summary["payload"])  # input should be a json encoded as bytes
+        ue_list = req["UEPredictionSet"]
+    except (json.decoder.JSONDecodeError, KeyError):
+        self.logger.debug("Received a TS Request but it was malformed!")
+
+    # we don't use rts here; free this
     self.rmr_free(sbuf)
+
+    # iterate over the ues and send a request each, if it is a valid UE, to QPP
+    for ueid in ue_list:
+        try:
+            to_qpp = data.form_qp_pred_req(self, ueid)
+            payload = json.dumps(to_qpp).encode()
+            ok = self.rmr_send(payload, 30001)
+            if not ok:
+                self.logger.debug("QP Driver was unable to send to QP Predictor!")
+        except UENotFound:
+            self.logger.debug("Received a TS Request for a UE that does not exist!")
 
 
 def start(thread=False, use_fake_sdl=False):

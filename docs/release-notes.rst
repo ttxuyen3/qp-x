@@ -14,6 +14,16 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+[1.0.0] - 4/1/2020
+------------------
+::
+
+    * This release is seen as the first complete implementation of QPD, although likely fixes and enhancements are needed
+    * Implement the rmr messaging
+    * Add tests for various bad scenarios like UE IDs not existing and Cell data not existing
+    * Fix UE IDs to be strings as they are in the req slides
+
+
 [0.2.0] - 3/27/2020
 -------------------
 ::

@@ -17,9 +17,10 @@ import json
 import time
 from contextlib import suppress
 from qpdriver import main, data
-from ricxappframe.xapp_frame import Xapp
+from ricxappframe.xapp_frame import Xapp, RMRXapp
 
-test_sender = None
+mock_traffic_steering = None
+mock_qp_predictor = None
 
 """
  these tests are not currently parallelizable (do not use this tox flag)
@@ -28,12 +29,13 @@ test_sender = None
 """
 
 
-def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, qpd_to_qp):
+def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, ue_metrics_with_bad_cell):
     # monkeypatch post_init to set the data we want in SDL
     def fake_post_init(self):
         self.def_hand_called = 0
         self.traffic_steering_requests = 0
         self.sdl_set(data.UE_NS, "12345", ue_metrics, usemsgpack=False)
+        self.sdl_set(data.UE_NS, "8675309", ue_metrics_with_bad_cell, usemsgpack=False)
         self.sdl_set(data.CELL_NS, "310-680-200-555001", cell_metrics_1, usemsgpack=False)
         self.sdl_set(data.CELL_NS, "310-680-200-555002", cell_metrics_2, usemsgpack=False)
         self.sdl_set(data.CELL_NS, "310-680-200-555003", cell_metrics_3, usemsgpack=False)
@@ -45,35 +47,59 @@ def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell
     main.start(thread=True, use_fake_sdl=True)
 
 
-def test_data_merge(qpd_to_qp):
+def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):
     """
-    test the merge (basically tests all of the code in data.py in this one line)
-    TODO: this will go away when the full E2E flow is implemented as we can just look at the final result
-    """
-    assert data.form_qp_pred_req(main.rmr_xapp, 12345) == qpd_to_qp
-
-
-def test_rmr_flow(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, qpd_to_qp):
-    """
-    just a skeleton for now.. this will evolve when qpd evolves
+    this flow mocks out the xapps on both sides of QP driver.
+    It first stands up a mock qp predictor, then it starts up a mock traffic steering which will immediately send requests to the running qp driver]
     """
 
-    # define a test sender
-    def entry(self):
+    expected_result = {}
 
-        val = json.dumps({"test send 30000": 1}).encode()
-        self.rmr_send(val, 30000)
+    # define a mock qp predictor
+    def default_handler(self, summary, sbuf):
+        pass
 
-        val = json.dumps({"test send 60001": 2}).encode()
-        self.rmr_send(val, 60001)
+    def qp_driver_handler(self, summary, sbuf):
+        nonlocal expected_result  # closures ftw
+        pay = json.loads(summary["payload"])
+        expected_result[pay["PredictionUE"]] = pay
 
-    global test_sender
-    test_sender = Xapp(entrypoint=entry, rmr_port=4564, use_fake_sdl=True)
-    test_sender.run()
+    global mock_qp_predictor
+    mock_qp_predictor = RMRXapp(default_handler, rmr_port=4666, use_fake_sdl=True)
+    mock_qp_predictor.register_callback(qp_driver_handler, 30001)
+    mock_qp_predictor.run(thread=True)
 
     time.sleep(1)
 
-    assert main.get_stats() == {"DefCalled": 1, "SteeringRequests": 1}
+    # define a mock traffic steering xapp
+    def entry(self):
+
+        # make sure a bad steering request doesn't blow up in qpd
+        val = "notevenjson".encode()
+        self.rmr_send(val, 30000)
+        val = json.dumps({"bad": "tothebone"}).encode()  # json but missing UEPredictionSet
+        self.rmr_send(val, 30000)
+
+        # valid request body but missing cell id
+        val = json.dumps({"UEPredictionSet": ["VOIDOFLIGHT"]}).encode()
+        self.rmr_send(val, 30000)
+
+        # good traffic steering request
+        val = json.dumps({"UEPredictionSet": ["12345", "8675309"]}).encode()
+        self.rmr_send(val, 30000)
+
+        # should trigger the default handler and do nothing
+        val = json.dumps({"test send 60001": 2}).encode()
+        self.rmr_send(val, 60001)
+
+    global mock_traffic_steering
+    mock_traffic_steering = Xapp(entrypoint=entry, rmr_port=4564, use_fake_sdl=True)
+    mock_traffic_steering.run()  # this will return since entry isn't a loop
+
+    time.sleep(1)
+
+    assert expected_result == {"12345": qpd_to_qp, "8675309": qpd_to_qp_bad_cell}
+    assert main.get_stats() == {"DefCalled": 1, "SteeringRequests": 4}
 
 
 def teardown_module():
@@ -83,6 +109,8 @@ def teardown_module():
     for example if an exception gets raised before stop is called in any test function above, pytest will hang forever
     """
     with suppress(Exception):
-        test_sender.stop()
+        mock_traffic_steering.stop()
+    with suppress(Exception):
+        mock_qp_predictor.stop()
     with suppress(Exception):
         main.stop()
