@@ -14,6 +14,17 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+[1.0.1] - 4/3/2020
+------------------
+::
+
+    * Docker now builds with an empty route file so rmr starts; it will not even start properly without this
+    * Change how fake_sdl is activated for docker convienence
+    * Create dev guide file
+    * Add instructions on how to test the rmr healthcheck in a running container
+    * Update to xapp frame 0.7.0 (which has rmr healthchecks)
+
+
 [1.0.0] - 4/1/2020
 ------------------
 ::

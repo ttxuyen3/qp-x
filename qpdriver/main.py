@@ -17,6 +17,7 @@ qpdriver entrypoint module
 #   limitations under the License.
 # ==================================================================================
 import json
+from os import getenv
 from ricxappframe.xapp_frame import RMRXapp
 from qpdriver import data
 from qpdriver.exceptions import UENotFound
@@ -75,14 +76,15 @@ def steering_req_handler(self, summary, sbuf):
             self.logger.debug("Received a TS Request for a UE that does not exist!")
 
 
-def start(thread=False, use_fake_sdl=False):
+def start(thread=False):
     """
     this is a convienence function that allows this xapp to run in Docker for "real" (no thread, real SDL)
     but also easily modified for unit testing (e.g., use_fake_sdl)
     the defaults for this function are for the Dockerized xapp.
     """
     global rmr_xapp
-    rmr_xapp = RMRXapp(default_handler, post_init=post_init, rmr_port=4562, use_fake_sdl=use_fake_sdl)
+    fake_sdl = getenv("USE_FAKE_SDL", None)
+    rmr_xapp = RMRXapp(default_handler, post_init=post_init, use_fake_sdl=True if fake_sdl else False)
     rmr_xapp.register_callback(steering_req_handler, 30000)
     rmr_xapp.run(thread)
 

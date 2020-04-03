@@ -18,7 +18,10 @@ FROM python:3.8-alpine
 # RMR setup
 RUN mkdir -p /opt/route/
 COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:5-a3.11-nng-rmr3 /usr/local/lib64/librmr_si.so /usr/local/lib64/librmr_si.so
+COPY --from=nexus3.o-ran-sc.org:10004/bldr-alpine3-go:5-a3.11-nng-rmr3 /usr/local/bin/health_ck /usr/local/bin/health_ck
 ENV LD_LIBRARY_PATH /usr/local/lib/:/usr/local/lib64
+COPY tests/fixtures/local.rt /opt/route/local.rt
+ENV RMR_SEED_RT /opt/route/local.rt
 
 # sdl needs gcc
 RUN apk update && apk add gcc musl-dev

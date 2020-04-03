@@ -44,7 +44,7 @@ def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell
     monkeypatch.setattr("qpdriver.main.post_init", fake_post_init)
 
     # start qpd
-    main.start(thread=True, use_fake_sdl=True)
+    main.start(thread=True)
 
 
 def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):

@@ -13,6 +13,7 @@ Welcome to O-RAN SC qp-driver Documentation
    overview.rst
    release-notes.rst
    installation-guide.rst
+   developers-guide.rst
 
 * :ref:`genindex`
 * :ref:`modindex`
