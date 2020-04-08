@@ -14,6 +14,14 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
    :depth: 3
    :local:
 
+
+[1.0.2] - 4/8/2020
+------------------
+::
+
+    * Upgrade to xapp frame 1.0.0 which includes rmr python
+
+
 [1.0.1] - 4/3/2020
 ------------------
 ::
