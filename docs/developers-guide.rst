@@ -12,12 +12,11 @@ Developers Guide
 
 Testing RMR Healthcheck
 -----------------------
-The following instructions should deploy the QP Driver container in bare docker, and allow you to test that the rmr healthcheck is working
+The following instructions should deploy the QP Driver container in bare docker, and allow you
+to test that the rmr healthcheck is working.
 
 ::
 
     docker build -t qpd:latest -f  Dockerfile .
     docker run -d --net=host -e USE_FAKE_SDL=1 qpd:latest
-    docker exec -it CONTAINER_ID /usr/local/bin/health_ck -h 127.0.0.1:4562
-
-
+    docker exec -it CONTAINER_ID /usr/local/bin/rmr_probe -h 127.0.0.1:4562
