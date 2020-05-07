@@ -22,7 +22,7 @@ setup(
     author="Tommy Carpenter",
     description="QP Driver Xapp for traffic steering",
     url="https://gerrit.o-ran-sc.org/r/admin/repos/ric-app/qp-driver",
-    install_requires=["ricxappframe>=1.0.0,<2.0.0"],
+    install_requires=["ricxappframe>=1.1.1,<2.0.0"],
     entry_points={"console_scripts": ["start.py=qpdriver.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
