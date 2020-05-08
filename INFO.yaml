@@ -48,6 +48,11 @@ committers:
       email: 'daniels@research.att.com'
       company: 'ATT'
       id: 'escottdaniels'
+    - name: 'Guy Jacobson'
+      email: 'gj2418@att.com'
+      company: 'ATT'
+      id: 'guyjacobson'
+      timezone: 'America/New_York'
 tsc:
     # yamllint disable rule:line-length
     approval: 'https://wiki.o-ran-sc.org/display/TOC#ORANSCTechnicalOversightCommittee(TOC)-20200304'
