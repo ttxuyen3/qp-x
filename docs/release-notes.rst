@@ -11,11 +11,13 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`__
 and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 
 
-[1.0.5] - 2020-05-07
+[1.0.5] - 2020-05-08
 --------------------
 
 * Upgrade to RMR version 4.0.5
 * Upgrade to framework version 1.1.0
+* Use constants from rmr module instead of hardcoded strings
+* Add Dockerfile-Unit-Test to support testing
 
 
 [1.0.4] - 2020-05-05

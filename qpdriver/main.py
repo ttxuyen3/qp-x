@@ -18,7 +18,7 @@ qpdriver entrypoint module
 # ==================================================================================
 import json
 from os import getenv
-from ricxappframe.xapp_frame import RMRXapp
+from ricxappframe.xapp_frame import RMRXapp, rmr
 from qpdriver import data
 from qpdriver.exceptions import UENotFound
 
@@ -40,7 +40,7 @@ def post_init(self):
 
 def default_handler(self, summary, sbuf):
     self.def_hand_called += 1
-    self.logger.info("QP Driver received an unexpected message of type: {}, dropping.".format(summary["message type"]))
+    self.logger.info("QP Driver received an unexpected message of type: {}, dropping.".format(summary[rmr.RMR_MS_MSG_TYPE]))
     self.rmr_free(sbuf)
 
 
@@ -56,7 +56,7 @@ def steering_req_handler(self, summary, sbuf):
     self.traffic_steering_requests += 1
     ue_list = []
     try:
-        req = json.loads(summary["payload"])  # input should be a json encoded as bytes
+        req = json.loads(summary[rmr.RMR_MS_PAYLOAD])  # input should be a json encoded as bytes
         ue_list = req["UEPredictionSet"]
     except (json.decoder.JSONDecodeError, KeyError):
         self.logger.debug("Received a TS Request but it was malformed!")
