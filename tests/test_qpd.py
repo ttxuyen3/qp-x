@@ -25,20 +25,22 @@ mock_qp_predictor = None
 """
  these tests are not currently parallelizable (do not use this tox flag)
  I would use setup_module, however that can't take monkeypatch fixtures
- Currently looking for the best way to make this better: https://stackoverflow.com/questions/60886013/python-monkeypatch-in-pytest-setup-module
+ Currently looking for the best way to make this better:
+ https://stackoverflow.com/questions/60886013/python-monkeypatch-in-pytest-setup-module
 """
 
 
 def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, ue_metrics_with_bad_cell):
     # monkeypatch post_init to set the data we want in SDL
+    # the metrics arguments are JSON (dict) objects
     def fake_post_init(self):
         self.def_hand_called = 0
         self.traffic_steering_requests = 0
-        self.sdl_set(data.UE_NS, "12345", ue_metrics, usemsgpack=False)
-        self.sdl_set(data.UE_NS, "8675309", ue_metrics_with_bad_cell, usemsgpack=False)
-        self.sdl_set(data.CELL_NS, "310-680-200-555001", cell_metrics_1, usemsgpack=False)
-        self.sdl_set(data.CELL_NS, "310-680-200-555002", cell_metrics_2, usemsgpack=False)
-        self.sdl_set(data.CELL_NS, "310-680-200-555003", cell_metrics_3, usemsgpack=False)
+        self.sdl_set(data.UE_NS, "12345", json.dumps(ue_metrics).encode(), usemsgpack=False)
+        self.sdl_set(data.UE_NS, "8675309", json.dumps(ue_metrics_with_bad_cell).encode(), usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555001", json.dumps(cell_metrics_1).encode(), usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555002", json.dumps(cell_metrics_2).encode(), usemsgpack=False)
+        self.sdl_set(data.CELL_NS, "310-680-200-555003", json.dumps(cell_metrics_3).encode(), usemsgpack=False)
 
     # patch
     monkeypatch.setattr("qpdriver.main.post_init", fake_post_init)
@@ -50,7 +52,9 @@ def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell
 def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):
     """
     this flow mocks out the xapps on both sides of QP driver.
-    It first stands up a mock qp predictor, then it starts up a mock traffic steering which will immediately send requests to the running qp driver]
+    It first stands up a mock qp predictor, then it starts up a
+    mock traffic steering which will immediately send requests
+    to the running qp driver]
     """
 
     expected_result = {}

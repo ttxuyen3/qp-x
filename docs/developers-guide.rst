@@ -10,6 +10,17 @@ Developers Guide
    :depth: 3
    :local:
 
+
+Version bumping the Xapp
+------------------------
+
+This project follows semver. When changes are made, update the version strings in:
+
+#. ``container-tag.yaml``
+#. ``docs/release-notes.rst``
+#. ``setup.py``
+
+
 Testing RMR Healthcheck
 -----------------------
 The following instructions should deploy the QP Driver container in bare docker, and allow you

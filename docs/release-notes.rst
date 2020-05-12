@@ -11,6 +11,11 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`__
 and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 
 
+[1.0.6] - 2020-05-12
+--------------------
+* Decode values from SDL as JSON (`RICAPP-104 <https://jira.o-ran-sc.org/browse/RICAPP-104>`_)
+
+
 [1.0.5] - 2020-05-08
 --------------------
 

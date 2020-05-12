@@ -1,6 +1,3 @@
-"""
-qpdriver module responsible for SDL queries and data merging
-"""
 # ==================================================================================
 #       Copyright (c) 2020 AT&T Intellectual Property.
 #
@@ -16,6 +13,11 @@ qpdriver module responsible for SDL queries and data merging
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # ==================================================================================
+
+"""
+qpdriver module responsible for SDL queries and data merging
+"""
+import json
 from qpdriver.exceptions import UENotFound
 
 # namespaces
@@ -67,9 +69,11 @@ def form_qp_pred_req(xapp_ref, ueid):
     Note that a single request to qp driver may have many UEs in a list, however since a new message needs to be sent for each one,
     the calling function iterates over that list, rather than doing it here.
     """
-    ue_data = xapp_ref.sdl_get(UE_NS, ueid, usemsgpack=False)
-    if not ue_data:
+    ue_data_bytes = xapp_ref.sdl_get(UE_NS, ueid, usemsgpack=False)
+    if not ue_data_bytes:
         raise UENotFound()
+    # input should be a json encoded as bytes
+    ue_data = json.loads(ue_data_bytes.decode())
 
     serving_cid = ue_data["ServingCellID"]
 
@@ -91,11 +95,15 @@ def form_qp_pred_req(xapp_ref, ueid):
     # form the Cell Measurements
     for cid in cell_ids:
 
-        cellm = xapp_ref.sdl_get(CELL_NS, cid, usemsgpack=False)
+        cellm_bytes = xapp_ref.sdl_get(CELL_NS, cid, usemsgpack=False)
 
-        if cellm:  # if cellm is None, then we omit that cell from this array
+        if cellm_bytes:  # if None, then we omit that cell from this array
 
-            # if we were really under performance strain here we could delete from the orig instead of copying but this code is far simpler
+            # input should be a json encoded as bytes
+            cellm = json.loads(cellm_bytes.decode())
+
+            # if we were really under performance strain here we could delete
+            # from the orig instead of copying but this code is far simpler
             cell_data = {k: cellm[k] for k in CELL_KEY_LIST}
 
             # these keys get dropped into *each* cell
