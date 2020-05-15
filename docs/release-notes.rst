@@ -10,6 +10,10 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`__
 and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 
+[1.0.7] - 2020-05-15
+--------------------
+* Include xapp descriptor json in repo (`RICAPP-97 <https://jira.o-ran-sc.org/browse/RICAPP-97>`_)
+  
 
 [1.0.6] - 2020-05-12
 --------------------
