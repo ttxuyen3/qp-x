@@ -19,8 +19,8 @@ from contextlib import suppress
 from qpdriver import main, data
 from ricxappframe.xapp_frame import Xapp, RMRXapp
 
-mock_traffic_steering = None
-mock_qp_predictor = None
+mock_ts_xapp = None
+mock_qp_xapp = None
 
 """
  these tests are not currently parallelizable (do not use this tox flag)
@@ -52,31 +52,30 @@ def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell
 def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):
     """
     this flow mocks out the xapps on both sides of QP driver.
-    It first stands up a mock qp predictor, then it starts up a
-    mock traffic steering which will immediately send requests
-    to the running qp driver]
+    It first stands up a mock qp, then it starts up a mock ts
+    which will immediately send requests to the running qp driver.
     """
 
     expected_result = {}
 
     # define a mock qp predictor
-    def default_handler(self, summary, sbuf):
+    def mock_qp_default_handler(self, summary, sbuf):
         pass
 
-    def qp_driver_handler(self, summary, sbuf):
+    def mock_qp_predict_handler(self, summary, sbuf):
         nonlocal expected_result  # closures ftw
         pay = json.loads(summary["payload"])
         expected_result[pay["PredictionUE"]] = pay
 
-    global mock_qp_predictor
-    mock_qp_predictor = RMRXapp(default_handler, rmr_port=4666, use_fake_sdl=True)
-    mock_qp_predictor.register_callback(qp_driver_handler, 30001)
-    mock_qp_predictor.run(thread=True)
+    global mock_qp_xapp
+    mock_qp_xapp = RMRXapp(mock_qp_default_handler, rmr_port=4666, use_fake_sdl=True)
+    mock_qp_xapp.register_callback(mock_qp_predict_handler, 30001)
+    mock_qp_xapp.run(thread=True)
 
     time.sleep(1)
 
     # define a mock traffic steering xapp
-    def entry(self):
+    def mock_ts_entry(self):
 
         # make sure a bad steering request doesn't blow up in qpd
         val = "notevenjson".encode()
@@ -96,9 +95,9 @@ def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):
         val = json.dumps({"test send 60001": 2}).encode()
         self.rmr_send(val, 60001)
 
-    global mock_traffic_steering
-    mock_traffic_steering = Xapp(entrypoint=entry, rmr_port=4564, use_fake_sdl=True)
-    mock_traffic_steering.run()  # this will return since entry isn't a loop
+    global mock_ts_xapp
+    mock_ts_xapp = Xapp(entrypoint=mock_ts_entry, rmr_port=4564, use_fake_sdl=True)
+    mock_ts_xapp.run()  # this will return since entry isn't a loop
 
     time.sleep(1)
 
@@ -110,11 +109,12 @@ def teardown_module():
     """
     this is like a "finally"; the name of this function is pytest magic
     safer to put down here since certain failures above can lead to pytest never returning
-    for example if an exception gets raised before stop is called in any test function above, pytest will hang forever
+    for example if an exception gets raised before stop is called in any test function above,
+    pytest will hang forever
     """
     with suppress(Exception):
-        mock_traffic_steering.stop()
+        mock_ts_xapp.stop()
     with suppress(Exception):
-        mock_qp_predictor.stop()
+        mock_qp_xapp.stop()
     with suppress(Exception):
         main.stop()

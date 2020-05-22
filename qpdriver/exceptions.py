@@ -1,6 +1,3 @@
-"""
-custom logic exceptions
-"""
 # ==================================================================================
 #       Copyright (c) 2020 AT&T Intellectual Property.
 #
@@ -16,6 +13,9 @@ custom logic exceptions
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 # ==================================================================================
+"""
+custom logic exceptions
+"""
 
 
 class UENotFound(BaseException):

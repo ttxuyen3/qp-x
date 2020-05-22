@@ -26,7 +26,8 @@ from qpdriver.exceptions import UENotFound
 RMR Messages
  #define TS_UE_LIST 30000
  #define TS_QOE_PRED_REQ 30001
-30000 is the message QPD receives, sends out 30001 to QP
+ #define TS_QOE_PREDICTION 30002
+30000 is the message type QPD receives; sends out type 30001, which should be routed to QP.
 """
 
 
@@ -46,9 +47,10 @@ def default_handler(self, summary, sbuf):
 
 def steering_req_handler(self, summary, sbuf):
     """
-    This is the main handler for this xapp, which handles the traffic steering requests.
+    This is the main handler for this xapp, which handles traffic steering requests.
     Traffic steering requests predictions on a set of UEs.
-    QP Driver (this) fetches a set of data, merges it together in a deterministic way, then sends a new message out to the QP predictor Xapp.
+    This app fetches a set of data, merges it together in a deterministic way,
+    then sends a new message out to the QP predictor Xapp.
 
     The incoming message that this function handles looks like:
         {“UEPredictionSet” : [“UEId1”,”UEId2”,”UEId3”]}
@@ -64,23 +66,23 @@ def steering_req_handler(self, summary, sbuf):
     # we don't use rts here; free this
     self.rmr_free(sbuf)
 
-    # iterate over the ues and send a request each, if it is a valid UE, to QPP
+    # iterate over the UEs and send a request for each, if it is a valid UE, to QP
     for ueid in ue_list:
         try:
             to_qpp = data.form_qp_pred_req(self, ueid)
             payload = json.dumps(to_qpp).encode()
             ok = self.rmr_send(payload, 30001)
             if not ok:
-                self.logger.debug("QP Driver was unable to send to QP Predictor!")
+                self.logger.debug("QP Driver was unable to send to QP!")
         except UENotFound:
             self.logger.debug("Received a TS Request for a UE that does not exist!")
 
 
 def start(thread=False):
     """
-    this is a convienence function that allows this xapp to run in Docker for "real" (no thread, real SDL)
-    but also easily modified for unit testing (e.g., use_fake_sdl)
-    the defaults for this function are for the Dockerized xapp.
+    This is a convenience function that allows this xapp to run in Docker
+    for "real" (no thread, real SDL), but also easily modified for unit testing
+    (e.g., use_fake_sdl). The defaults for this function are for the Dockerized xapp.
     """
     global rmr_xapp
     fake_sdl = getenv("USE_FAKE_SDL", None)
