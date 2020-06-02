@@ -10,6 +10,12 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog <http://keepachangelog.com/>`__
 and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 
+
+[1.0.9] - 2020-06-02
+--------------------
+* Change RMR listen port to 4560 (`RICAPP-112 <https://jira.o-ran-sc.org/browse/RICAPP-112>`_)
+
+
 [1.0.8] - 2020-05-22
 --------------------
 * Revise static route table (`RICAPP-108 <https://jira.o-ran-sc.org/browse/RICAPP-108>`_)

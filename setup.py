@@ -17,7 +17,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="qpdriver",
-    version="1.0.8",
+    version="1.0.9",
     packages=find_packages(exclude=["tests.*", "tests"]),
     author="Tommy Carpenter",
     description="QP Driver Xapp for traffic steering",
