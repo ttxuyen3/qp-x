@@ -1,10 +1,10 @@
 ---
 distribution_type: container
-container_release_tag: 1.0.7
+container_release_tag: 1.0.9
 container_pull_registry: nexus3.o-ran-sc.org:10004
 container_push_registry: nexus3.o-ran-sc.org:10002
 project: ric-app/qp-driver
-ref: 1831d5627873631f3a4184e075d9ccd3d315aa8d
+ref: f628e2b58bde028a9b0bd0ee48168fb773814e69
 containers:
     - name: ric-app-qp-driver
-      version: 1.0.7
+      version: 1.0.9
