@@ -17,13 +17,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="qpdriver",
-    version="1.0.9",
+    version="1.1.0",
     packages=find_packages(exclude=["tests.*", "tests"]),
-    author="Tommy Carpenter",
-    description="QP Driver Xapp for traffic steering",
+    author="O-RAN-SC Community",
+    description="QP Driver Xapp for traffic steering use case",
     url="https://gerrit.o-ran-sc.org/r/admin/repos/ric-app/qp-driver",
-    install_requires=["ricxappframe>=1.1.1,<2.0.0"],
-    entry_points={"console_scripts": ["start.py=qpdriver.main:start"]},  # adds a magical entrypoint for Docker
+    install_requires=["ricxappframe>=1.2.0,<2.0.0"],
+    entry_points={"console_scripts": ["start-qpd.py=qpdriver.main:start"]},  # adds a magical entrypoint for Docker
     license="Apache 2.0",
     data_files=[("", ["LICENSE.txt"])],
 )

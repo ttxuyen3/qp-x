@@ -36,4 +36,4 @@ RUN pip install /tmp
 
 # Run
 ENV PYTHONUNBUFFERED 1
-CMD start.py
+CMD start-qpd.py
