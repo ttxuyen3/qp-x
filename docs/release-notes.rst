@@ -15,6 +15,7 @@ and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 --------------------
 * Send alarm on SDL failure (`RICAPP-117 <https://jira.o-ran-sc.org/browse/RICAPP-117>`_)
 * Define configuration properties in xapp-descriptor controls section with JSON schema
+* Add configuration-change handler method that logs the event
 * Requires RMR at version 4.1.2 or later
 * Requires xapp-frame-py at version 1.3.0 or later
 

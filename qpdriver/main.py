@@ -45,6 +45,13 @@ def post_init(self):
     self.alarm_sdl = None
 
 
+def handle_config_change(self, config):
+    """
+    Function that runs at start and on every configuration file change.
+    """
+    self.logger.debug("handle_config_change: config: {}".format(config))
+
+
 def default_handler(self, summary, sbuf):
     """
     Function that processes messages for which no handler is defined
@@ -114,7 +121,11 @@ def start(thread=False):
     """
     global rmr_xapp
     fake_sdl = getenv("USE_FAKE_SDL", None)
-    rmr_xapp = RMRXapp(default_handler, rmr_port=4560, post_init=post_init, use_fake_sdl=bool(fake_sdl))
+    rmr_xapp = RMRXapp(default_handler,
+                       config_handler=handle_config_change,
+                       rmr_port=4560,
+                       post_init=post_init,
+                       use_fake_sdl=bool(fake_sdl))
     rmr_xapp.register_callback(steering_req_handler, 30000)
     rmr_xapp.run(thread)
 

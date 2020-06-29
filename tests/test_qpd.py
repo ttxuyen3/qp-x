@@ -21,6 +21,8 @@ from ricxappframe.xapp_frame import Xapp, RMRXapp
 
 mock_ts_xapp = None
 mock_qp_xapp = None
+# tox.ini sets env var to this value
+config_file_path = "/tmp/config.json"
 
 """
  these tests are not currently parallelizable (do not use this tox flag)
@@ -28,6 +30,17 @@ mock_qp_xapp = None
  Currently looking for the best way to make this better:
  https://stackoverflow.com/questions/60886013/python-monkeypatch-in-pytest-setup-module
 """
+
+
+def init_config_file():
+    with open(config_file_path, "w") as file:
+        file.write('{ "example_int" : 0 }')
+
+
+def write_config_file():
+    # generate an inotify/config event
+    with open(config_file_path, "w") as file:
+        file.write('{ "example_int" : 1 }')
 
 
 def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell_metrics_3, ue_metrics_with_bad_cell):
@@ -47,8 +60,15 @@ def test_init_xapp(monkeypatch, ue_metrics, cell_metrics_1, cell_metrics_2, cell
     # patch
     monkeypatch.setattr("qpdriver.main.post_init", fake_post_init)
 
+    # establish config
+    init_config_file()
+
     # start qpd
     main.start(thread=True)
+
+    # wait a bit then update config
+    time.sleep(3)
+    write_config_file()
 
 
 def test_rmr_flow(monkeypatch, qpd_to_qp, qpd_to_qp_bad_cell):
