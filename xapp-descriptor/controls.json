@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "#/controls",
+  "type": "object",
+  "title": "Controls Section Schema",
+  "required": [
+    "example_int",
+    "example_str"
+  ],
+  "properties": {
+    "example_int": {
+      "$id": "#/properties/controls/items/properties/example_int",
+      "type": "integer",
+      "title": "An example integer property",
+      "default": 0
+    },
+    "example_str": {
+      "$id": "#/properties/controls/items/properties/example_str",
+      "type": "string",
+      "title": "An example string property",
+      "default": ""
+    }
+  }
+}

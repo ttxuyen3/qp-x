@@ -35,6 +35,10 @@
       }
     ]
   },
+  "controls": {
+    "example_int": 10000,
+    "example_str": "value"
+  },
   "rmr": {
     "protPort": "tcp:4560",
     "maxSize": 2072,
