@@ -39,11 +39,11 @@ committers:
       company: 'ATT'
       id: 'jackl'
       timezone: 'America/New_York'
-    - name: 'Tommy Carpenter'
-      email: 'tc677g@att.com'
-      company: 'att'
-      id: 'tommycarpenter'
-      timezone: 'America/New_York'
+    - name: Chris Lott
+      email: clott@research.att.com
+      company: AT&T
+      id: cl778h
+      timezone: America/New_York
     - name: 'Scott Daniels'
       email: 'daniels@research.att.com'
       company: 'ATT'
@@ -57,6 +57,9 @@ tsc:
     # yamllint disable rule:line-length
     approval: 'https://wiki.o-ran-sc.org/display/TOC#ORANSCTechnicalOversightCommittee(TOC)-20200304'
     changes:
-        - type: ''
-          name: ''
-          link: ''
+        - type: 'Removal'
+          name: 'Tommy Carpenter'
+          link: 'https://lists.o-ran-sc.org/g/main/topic/committer_changes_in_ricapp/75199311?p=,,,20,0,0,0::recentpostdate%2Fsticky,,,20,0,0,75199311'
+        - type: 'Promotion'
+          name: 'Chris Lott'
+          link: 'https://lists.o-ran-sc.org/g/main/topic/committer_changes_in_ricapp/75199311?p=,,,20,0,0,0::recentpostdate%2Fsticky,,,20,0,0,75199311'
