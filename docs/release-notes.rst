@@ -11,9 +11,10 @@ The format is based on `Keep a Changelog <http://keepachangelog.com/>`__
 and this project adheres to `Semantic Versioning <http://semver.org/>`__.
 
 
-[1.1.0] - 2020-06-11
+[1.1.0] - 2020-06-29
 --------------------
 * Send alarm on SDL failure (`RICAPP-117 <https://jira.o-ran-sc.org/browse/RICAPP-117>`_)
+* Requires RMR at version 4.1.2 or later
 * Requires xapp-frame-py at version 1.2.0 or later
 
 
