@@ -26,7 +26,7 @@ RMR Messages
 import json
 from os import getenv
 from ricxappframe.xapp_frame import RMRXapp, rmr
-from ricxappframe.alarm import alarm
+# from ricxappframe.alarm import alarm
 from qpdriver import data
 from qpdriver.exceptions import UENotFound
 
@@ -41,8 +41,8 @@ def post_init(self):
     """
     self.def_hand_called = 0
     self.traffic_steering_requests = 0
-    self.alarm_mgr = alarm.AlarmManager(self._mrc, "ric-xapp", "qp-driver")
-    self.alarm_sdl = None
+    # self.alarm_mgr = alarm.AlarmManager(self._mrc, "ric-xapp", "qp-driver")
+    # self.alarm_sdl = None
 
 
 def handle_config_change(self, config):
@@ -84,22 +84,22 @@ def steering_req_handler(self, summary, sbuf):
         self.logger.warning("steering_req_handler failed to parse request: {}".format(summary[rmr.RMR_MS_PAYLOAD]))
         return
 
-    if self._sdl.healthcheck():
+    # if self._sdl.healthcheck():
         # healthy, so clear the alarm if it was raised
-        if self.alarm_sdl:
-            self.logger.debug("steering_req_handler clearing alarm")
-            self.alarm_mgr.clear_alarm(self.alarm_sdl)
-            self.alarm_sdl = None
-    else:
+        # if self.alarm_sdl:
+        #    self.logger.debug("steering_req_handler clearing alarm")
+        #    self.alarm_mgr.clear_alarm(self.alarm_sdl)
+        #    self.alarm_sdl = None
+    # else:
         # not healthy, so (re-)raise the alarm
-        self.logger.debug("steering_req_handler connection to SDL is not healthy, raising alarm")
-        if self.alarm_sdl:
-            self.alarm_mgr.reraise_alarm(self.alarm_sdl)
-        else:
-            self.alarm_sdl = self.alarm_mgr.create_alarm(1, alarm.AlarmSeverity.CRITICAL, "SDL failure")
-            self.alarm_mgr.raise_alarm(self.alarm_sdl)
-        self.logger.warning("steering_req_handler dropping request!")
-        return
+        # self.logger.debug("steering_req_handler connection to SDL is not healthy, raising alarm")
+        # if self.alarm_sdl:
+        #    self.alarm_mgr.reraise_alarm(self.alarm_sdl)
+        # else:
+        #    self.alarm_sdl = self.alarm_mgr.create_alarm(1, alarm.AlarmSeverity.CRITICAL, "SDL failure")
+        #    self.alarm_mgr.raise_alarm(self.alarm_sdl)
+        # self.logger.warning("steering_req_handler dropping request!")
+        # return
 
     # iterate over the UEs and send a request for each, if it is a valid UE, to QP
     for ueid in ue_list:
