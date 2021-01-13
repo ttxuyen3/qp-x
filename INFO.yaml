@@ -39,11 +39,16 @@ committers:
       company: 'ATT'
       id: 'jackl'
       timezone: 'America/New_York'
-    - name: Chris Lott
-      email: clott@research.att.com
-      company: AT&T
-      id: cl778h
-      timezone: America/New_York
+    - name: 'Chandrasekaran Ramachandran'
+      email: 'chandrasekaran-r@hcl.com'
+      company: 'HCL'
+      id: 'Chandru'
+      timezone: 'India/India Standard Time(IST)'
+    - name: 'Deepanshu Karnwal'
+      email: 'deepanshu.k@hcl.com'
+      company: 'HCL'
+      id: 'deepanshuk'
+      timezone: 'India/India Standard Time(IST)'
     - name: 'Scott Daniels'
       email: 'daniels@research.att.com'
       company: 'ATT'
