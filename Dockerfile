@@ -36,4 +36,5 @@ RUN pip install /tmp
 
 # Run
 ENV PYTHONUNBUFFERED 1
+ENV USE_FAKE_SDL False
 CMD start-qpd.py
