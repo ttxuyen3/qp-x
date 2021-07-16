@@ -5,7 +5,7 @@
     {
       "name": "qpdriver",
       "image": {
-        "registry": "https://hub.docker.com",
+        "registry": "registry.hub.docker.com",
         "name": "ttxuyen3/qp-driver",
         "tag": "latest"
       }
